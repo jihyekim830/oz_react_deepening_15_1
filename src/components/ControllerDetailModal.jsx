@@ -1,9 +1,8 @@
-import React from 'react';
+import { useSetRecoilState } from 'recoil';
+import todoList from '../recoil/atom';
 
 const ControllerDetailModal = ({ onClose }) => {
-  // recoil을 이용하여 상태관리를 하도록 변경합니다.
-  // useSetRecoilState를 이용하여 전역상태를 업데이트하도록 수정합니다.
-  // handleForm에서 data를 만들고 있습니다. 이 data를 할당해야합니다.
+  const setTodoList = useSetRecoilState(todoList);
 
   const handleForm = (e) => {
     e.preventDefault();
@@ -16,13 +15,15 @@ const ControllerDetailModal = ({ onClose }) => {
       desc: formData.get('desc'),
       created_at: new Date().toISOString().split('T')[0],
     };
+    setTodoList((prev) => [...prev, data]);
     onClose();
   };
+
   return (
     <div onClick={onClose} className="fixed inset-0 flex items-center justify-center bg-black/70 bg-opacity-50 z-50">
       <div onClick={(e) => e.stopPropagation()} className="bg-white rounded-lg shadow-lg p-6 w-[600px]">
         <h2 className="text-xl font-semibold mb-4 whitespace-break-spaces">업무 추가</h2>
-        <form onSubmit={(e) => handleForm(e)} className="flex flex-col gap-2">
+        <form onSubmit={handleForm} className="flex flex-col gap-2">
           <div>업무 분류</div>
           <select className="border border-gray-300 rounded-md p-2" name="type" id="type">
             <option value="todo">할 일</option>
